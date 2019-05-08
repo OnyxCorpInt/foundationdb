@@ -31,7 +31,7 @@ function create_server_environment() {
 	if [[ "$FDB_NETWORKING_MODE" == "host" ]]; then
 		public_ip=127.0.0.1
 	elif [[ "$FDB_NETWORKING_MODE" == "container" ]]; then
-		public_ip=$(grep `hostname` /etc/hosts | sed -e "s/\s *`hostname`.*//")
+		public_ip=$(grep ${fdbhostname} /etc/hosts | sed -e "s/\s *"${fdbhostname}".*//")
 	else
 		echo "Unknown FDB Networking mode \"$FDB_NETWORKING_MODE\"" 1>&2
 		exit 1
