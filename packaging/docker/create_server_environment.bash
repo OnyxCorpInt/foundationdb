@@ -38,9 +38,12 @@ function create_server_environment() {
 	fi
 
 	echo "export PUBLIC_IP=$public_ip" >> $env_file
-	if [[ -z $FDB_COORDINATOR ]]; then
+        if [[ -n $FDB_CLUSTER_FILE_CONTENTS ]]; then
+		 FDB_CLUSTER_RESULT="Joined Existing Cluster"
+	elif [[ -z $FDB_COORDINATOR ]]; then
 		FDB_CLUSTER_FILE_CONTENTS="docker:docker@$public_ip:$FDB_PORT"
-	fi
+        
+        fi
 
 	create_cluster_file
 }

@@ -26,4 +26,4 @@ source /var/fdb/.fdbenv
 echo "Starting FDB server on $PUBLIC_IP:4500"
 fdbserver --listen_address 0.0.0.0:$FDB_PORT --public_address $PUBLIC_IP:4500 \
 	--datadir /var/fdb/data --logdir /var/fdb/logs \
-	--locality_zoneid=$fdbhostname --locality_machineid=$fdbhostname --class $FDB_PROCESS_CLASS
+	--locality_zoneid=$fdblocality --locality_machineid=$fdbhostname --class $FDB_PROCESS_CLASS
