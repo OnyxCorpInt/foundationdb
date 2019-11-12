@@ -27,6 +27,7 @@ import (
 	"encoding/binary"
 	"errors"
 	"fmt"
+	"encoding/hex"
 
 	"github.com/apple/foundationdb/bindings/go/src/fdb"
 	"github.com/apple/foundationdb/bindings/go/src/fdb/subspace"
@@ -125,8 +126,11 @@ func (dl directoryLayer) createOrOpen(rtr fdb.ReadTransaction, tr *fdb.Transacti
 			return nil, fmt.Errorf("unable to allocate new directory prefix (%s)", e.Error())
 		}
 
-		if !isRangeEmpty(rtr, newss) {
-			return nil, fmt.Errorf("the database has keys stored at the prefix chosen by the automatic prefix allocator: %v", prefix)
+		inRange := len(rtr.GetRange(newss, fdb.RangeOptions{}).GetSliceOrPanic())
+		rangeKey := hex.EncodeToString(newss.Bytes())
+
+		if inRange != 0 {
+			return nil, fmt.Errorf("the database has keys stored at the prefix chosen by the automatic prefix allocator:\npath = %s, nil prefix, keys in range = %d, range key = %s", path, inRange, rangeKey)
 		}
 
 		prefix = newss.Bytes()
